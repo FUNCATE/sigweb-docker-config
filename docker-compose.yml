@@ -1,4 +1,4 @@
-version: '3'
+version: '2'
 services:
   postgres:
     image: mdillon/postgis
@@ -19,7 +19,7 @@ services:
     volumes:
       - pgadmin_vol:/var/lib/pgadmin
     ports:
-      - "8000:80"
+      - "8001:80"
     depends_on:
       - postgres
     networks:
@@ -39,12 +39,10 @@ services:
     networks:
       - postgres-compose-network
 
-
-
 volumes:
-  postgres_vol:/home/funcate/docker-volumes/postgresql/data
-  pgadmin_vol:/home/funcate/docker-volumes/pgadmin/
-  geoserver_vol:/home/funcate/docker-volumes/geoserver/data_dir 
+  postgres_vol:
+  pgadmin_vol:
+  geoserver_vol:
 
 networks:
   postgres-compose-network:
