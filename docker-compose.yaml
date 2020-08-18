@@ -1,0 +1,51 @@
+version: '3'
+services:
+  postgres:
+    image: mdillon/postgis
+    environment:
+      POSTGRES_PASSWORD: "postgres"
+    volumes:
+      - postgres_vol:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - postgres-compose-network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "test@test.com"
+      PGADMIN_DEFAULT_PASSWORD: "test"
+    volumes:
+      - pgadmin_vol:/var/lib/pgadmin
+    ports:
+      - "8000:80"
+    depends_on:
+      - postgres
+    networks:
+      - postgres-compose-network
+
+  geoserver:
+    hostname: geoserver
+    container_name: geoserver
+    image: kartoza/geoserver
+    environment:
+      - GEOSERVER_ADMIN_PASSWORD=geoserver
+    volumes:
+      - geoserver_vol:/opt/geoserver/data_dir
+    ports:
+      - "8080:8080"
+    restart: always
+    networks:
+      - postgres-compose-network
+
+
+
+volumes:
+  postgres_vol:/home/funcate/docker-volumes/postgresql/data
+  pgadmin_vol:/home/funcate/docker-volumes/pgadmin/
+  geoserver_vol:/home/funcate/docker-volumes/geoserver/data_dir 
+
+networks:
+  postgres-compose-network:
+    driver: bridge
